@@ -15,7 +15,7 @@ class Memory(object):
         self.step = 0
         self.num_steps = num_steps
         
-    def insert(self, obs, action, action_log_prob, value_pred, reward, mask):
+    def push(self, obs, action, action_log_prob, value_pred, reward, mask):
         self.obs[self.step + 1].copy_(obs)
         self.actions[self.step].copy_(action)
         self.action_log_probs[self.step].copy_(action_log_prob)

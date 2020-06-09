@@ -87,7 +87,7 @@ def main():
 
     obs = env.reset()
     obs = torch.FloatTensor(obs)
-    done = 0.0
+    done = torch.FloatTensor([0.0])
 
     policy = PPO(env.observation_space, 
                 env.action_space,
@@ -109,9 +109,10 @@ def main():
                 value, action, action_log_prob = policy.act(obs, done)
 
             obs, reward, done, infos = env.step(action)
-            done = torch.FloatTensor([1.0]) if done else torch.FloatTensor([0.0])
             obs = torch.FloatTensor(obs)
-            memory.insert(obs, action, action_log_prob, value, reward, done)
+            done = torch.FloatTensor([1.0]) if done else torch.FloatTensor([0.0])
+            
+            memory.push(obs, action, action_log_prob, value, reward, done)
         
         with torch.no_grad():
             next_value = policy.get_value(obs, done)
